@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Derive version from tag
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+
+      - name: Check versions are consistent
+        run: |
+          set -e
+          fail=0
+          grep -q "^VERSION = \"${VERSION}\"$" bin/user/rtspimage.py \
+            || { echo "::error::bin/user/rtspimage.py VERSION != ${VERSION}"; fail=1; }
+          grep -q "version=\"${VERSION}\"" install.py \
+            || { echo "::error::install.py version != ${VERSION}"; fail=1; }
+          grep -q "^## \[${VERSION}\] - " CHANGELOG.md \
+            || { echo "::error::CHANGELOG.md has no dated section for ${VERSION}"; fail=1; }
+          exit $fail
+
+      - name: Build extension archive
+        run: |
+          pkg="weewx-rtsp-image-${VERSION}"
+          mkdir -p "dist/${pkg}"
+          cp -r bin install.py skins CHANGELOG.md LICENSE README.md "dist/${pkg}/"
+          (cd dist && zip -r -q "${pkg}.zip" "${pkg}")
+          cp "dist/${pkg}.zip" dist/weewx-rtsp-image.zip
+          ls -l dist
+
+      - name: Extract release notes
+        run: |
+          awk -v v="$VERSION" '
+            index($0, "## [" v "] ") == 1 { grab=1; next }
+            grab && index($0, "## [") == 1 { exit }
+            grab && substr($0, 1, 1) == "[" { exit }
+            grab { print }
+          ' CHANGELOG.md | sed '/^[[:space:]]*$/d' > notes.md
+          echo "--- notes.md ---"; cat notes.md
+          test -s notes.md || { echo "::error::no release notes found for ${VERSION}"; exit 1; }
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            "dist/weewx-rtsp-image-${VERSION}.zip" \
+            "dist/weewx-rtsp-image.zip" \
+            --title "weewx-rtsp-image ${VERSION}" \
+            --notes-file notes.md
