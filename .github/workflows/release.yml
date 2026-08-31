@@ -49,7 +49,7 @@ jobs:
             echo "found=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         if: steps.detect.outputs.found == 'true'
         with:
           dotnet-version: "10.0.x"
