@@ -1,0 +1,52 @@
+# ═══════════════════════════════════════════════════════════════════════════
+#  .NET 10 / C# overlay.  Replace this file for a non-.NET project.
+#  It auto-detects a solution/project so the template repo's own CI is green
+#  and real work starts once you commit a *.sln / *.csproj.
+# ═══════════════════════════════════════════════════════════════════════════
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect .NET project
+        id: detect
+        run: |
+          if ls *.sln **/*.sln *.csproj **/*.csproj >/dev/null 2>&1; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No .sln/.csproj found; skipping .NET build. Replace .github/workflows for your stack."
+          fi
+
+      - uses: actions/setup-dotnet@v4
+        if: steps.detect.outputs.found == 'true'
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore
+        if: steps.detect.outputs.found == 'true'
+        run: dotnet restore
+
+      - name: Format check
+        if: steps.detect.outputs.found == 'true'
+        run: dotnet format --verify-no-changes --no-restore
+
+      - name: Build
+        if: steps.detect.outputs.found == 'true'
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        if: steps.detect.outputs.found == 'true'
+        run: dotnet test --configuration Release --no-build --verbosity normal

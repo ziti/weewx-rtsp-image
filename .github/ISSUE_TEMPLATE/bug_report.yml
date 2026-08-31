@@ -1,0 +1,74 @@
+name: Bug report
+description: Something isn't working
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please do the basic troubleshooting first and
+        include the details below — it's what makes a bug actionable.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before filing
+      options:
+        - label: I'm on the latest release.
+          required: true
+        - label: I searched existing issues and didn't find this.
+          required: true
+        - label: I can reproduce this reliably with the steps below.
+          required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Project version (and commit, if built from source).
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS + version, runtime/toolchain version, and anything else relevant.
+      placeholder: "Ubuntu 24.04, .NET 10.0.100"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands or actions. A minimal repro is worth a lot.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-actual
+    attributes:
+      label: Expected vs actual
+      description: What you expected to happen, and what actually happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / output
+      description: Relevant logs, stack traces, or console output. Redact secrets and private hostnames.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration (optional)
+      description: Relevant config, with secrets redacted.
+      render: text
