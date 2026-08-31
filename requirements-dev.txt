@@ -3,5 +3,5 @@
 # Runtime needs just a WeeWX 5.4+ install and an `ffmpeg` binary on PATH;
 # the extension itself imports nothing outside the Python standard library
 # and WeeWX.
-ruff>=0.6
+ruff>=0.16.5
 pytest>=8
