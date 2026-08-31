@@ -1,0 +1,31 @@
+# Python
+*.py[cod]
+__pycache__/
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Editors / OS
+*~
+*.swp
+.DS_Store
+.idea/
+.vscode/
+
+# Captured frames (this extension writes JPEGs; never commit them)
+*.jpg
+*.jpeg
+*.png

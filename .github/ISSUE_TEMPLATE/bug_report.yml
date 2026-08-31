@@ -1,0 +1,78 @@
+name: Bug report
+description: Something isn't working
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please work through the checklist first — most
+        capture problems are the camera, network, or credentials rather than
+        the extension.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before filing
+      options:
+        - label: I'm on WeeWX 5.4 or newer and the latest release of this extension.
+          required: true
+        - label: I reproduced the capture with a plain `ffmpeg` command and that part works.
+          required: true
+        - label: I ran `weectl report run rtspimage` with `debug = 1` and read the log.
+          required: true
+        - label: I searched existing issues and didn't find this.
+          required: true
+
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Extension version, WeeWX version, OS + version.
+      placeholder: "rtspimage 0.1.0, WeeWX 5.4.0, Debian 12"
+    validations:
+      required: true
+
+  - type: input
+    id: ffmpeg
+    attributes:
+      label: ffmpeg version
+      description: First line of `ffmpeg -version`.
+      placeholder: "ffmpeg version 5.1.6-0+deb12u1"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you expected, and what actually happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration
+      description: >
+        Your `[StdReport] / [[rtspimage]]` section from `weewx.conf`.
+        REDACT credentials and any private hostnames/IPs in the RTSP URLs.
+      render: ini
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log output
+      description: >
+        Relevant WeeWX log lines with `debug = 1` set. Redact credentials.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: manual-ffmpeg
+    attributes:
+      label: Manual ffmpeg result (optional)
+      description: The exact `ffmpeg` command you ran by hand and its output.
+      render: text
