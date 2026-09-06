@@ -29,3 +29,6 @@ env/
 *.jpg
 *.jpeg
 *.png
+
+# ...but project artwork does belong in the repo
+!assets/*.png

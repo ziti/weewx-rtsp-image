@@ -1,5 +1,9 @@
 # weewx-rtsp-image
 
+<p align="center">
+  <img src="assets/weewx-rtsp-image-logo.png" alt="weewx-rtsp-image logo" width="360">
+</p>
+
 [![CI](https://github.com/ziti/weewx-rtsp-image/actions/workflows/ci.yml/badge.svg)](https://github.com/ziti/weewx-rtsp-image/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/ziti/weewx-rtsp-image?sort=semver)](https://github.com/ziti/weewx-rtsp-image/releases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
